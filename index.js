@@ -3,23 +3,19 @@ const fetch = require('node-fetch');
 const cors = require('cors');
 
 const app = express();
-app.use(cors());
+
+// Cho phép tất cả các miền
+app.use(cors()); 
+
+// Hoặc chỉ cho phép miền của bạn
+// app.use(cors({ origin: 'https://your-domain.com' }));
 
 app.get('/gold', async (req, res) => {
   try {
-    const response = await fetch('https://www.mihong.vn/api/v1/gold/prices/current', {
-      headers: {
-        'Origin': 'https://laygiamihong-proxy.onrender.com', // Thêm header Origin nếu cần
-        'Referer': 'https://laygiamihong-proxy.onrender.com', // Thêm Referer nếu cần
-      }
-    });
-    if (!response.ok) {
-      throw new Error('Failed to fetch gold prices');
-    }
+    const response = await fetch('https://www.mihong.vn/api/v1/gold/prices/current');
     const data = await response.json();
     res.json(data);
   } catch (err) {
-    console.error("Error fetching data:", err); // Ghi lại lỗi chi tiết
     res.status(500).json({ error: 'Failed to fetch gold price' });
   }
 });
