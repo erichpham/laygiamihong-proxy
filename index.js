@@ -6,7 +6,7 @@ const port = process.env.PORT || 3000;
 
 // Cấu hình httpsAgent để bỏ qua kiểm tra chứng chỉ SSL
 const agent = new https.Agent({
-  rejectUnauthorized: false
+  rejectUnauthorized: false  // Bỏ qua kiểm tra SSL
 });
 
 app.get('/mihong', async (req, res) => {
@@ -15,7 +15,7 @@ app.get('/mihong', async (req, res) => {
     
     // Thực hiện yêu cầu đến Mi Hồng
     const response = await axios.get('https://www.mihong.vn/api/v1/gold/prices/current', {
-      httpsAgent: agent  // Gửi yêu cầu với agent không xác thực SSL
+      httpsAgent: agent  // Sử dụng agent không xác thực SSL
     });
 
     console.log('Data fetched successfully.');
