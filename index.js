@@ -1,9 +1,8 @@
-const express = require('express');
 const axios = require('axios');
+const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Định nghĩa endpoint '/gold-prices'
 app.get('/gold-prices', async (req, res) => {
   try {
     const response = await axios.get('https://www.mihong.vn/api/v1/gold/prices/current');
