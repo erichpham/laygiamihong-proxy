@@ -1,31 +1,28 @@
 const express = require('express');
 const axios = require('axios');
-const https = require('https');
+const cors = require('cors');
+
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
-// Cấu hình httpsAgent để bỏ qua kiểm tra chứng chỉ SSL
-const agent = new https.Agent({
-  rejectUnauthorized: false  // Bỏ qua kiểm tra SSL
-});
+// Enable CORS (Cross-Origin Resource Sharing) if you are using this API in a browser
+app.use(cors());
 
-app.get('/mihong', async (req, res) => {
-  try {
-    console.log('Fetching data from Mi Hồng...');
-    
-    // Thực hiện yêu cầu đến Mi Hồng
-    const response = await axios.get('https://www.mihong.vn/api/v1/gold/prices/current', {
-      httpsAgent: agent  // Sử dụng agent không xác thực SSL
-    });
-
-    console.log('Data fetched successfully.');
-    res.json(response.data);
-  } catch (error) {
-    console.error('Error occurred while fetching data from Mi Hồng:', error.message);
-    res.status(500).json({ error: 'Failed to fetch data from Mi Hồng', details: error.message });
-  }
+// Route to fetch gold price data from Mihong API
+app.get('/gold-prices', async (req, res) => {
+    try {
+        const response = await axios.get('https://www.mihong.vn/api/v1/gold/prices/current', {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        res.json(response.data); // Return the data as JSON
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        res.status(500).json({ error: 'Failed to fetch data from Mihong API' });
+    }
 });
 
 app.listen(port, () => {
-  console.log(`Proxy server is running on port ${port}`);
+    console.log(`Server is running on port ${port}`);
 });
